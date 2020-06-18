@@ -18,7 +18,7 @@ public class Game {
   public Game() {
 
     grid = new Grid(5, 10);// can edit
-   // grid.setMovableBackground(imgName, xOffset, yOffset, xScale, yScale);//offset can be 0,0. Background tbd
+    //grid.setBackground(imgName);
     userRow = 3;
     userCol = 0;
     grid.fullscreen(); 
@@ -30,7 +30,11 @@ public class Game {
   }
   
   public void play() {
+    
+    //title screen
 
+    //start the game
+    grid.setMovableBackground(laserPic, 0, 0, 0.1, 0.1);//offset can be 0,0. Background tbd
     while (!isGameOver()) {
       grid.pause(100);
       handleKeyPress();
