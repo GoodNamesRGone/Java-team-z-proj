@@ -3,6 +3,8 @@
  */
 
 public class Game {
+  private int lives;
+  private int score;
   private String laserPic = "images/laser.png";
   private String userLaser = "images/cool laser.png";
   private Grid grid;
@@ -19,8 +21,8 @@ public class Game {
     userRow = 3;
     grid.fullscreen(); 
     msElapsed = 0;
-    timesGet = 0;
-    timesAvoid = 0;
+    lives = 5;
+    score = 0;
     updateTitle();
     grid.setImage(new Location(userRow, 0), userPic);
   }
@@ -152,6 +154,9 @@ public class Game {
       if (loc.getCol() == lastCol || loc.getRow() == lastRow){
         lastCol = lastCol;
         lastRow = lastRow;
+      }
+      if (loc.equals(meteor) == lastRow) {
+        lives--;
       }
     }
   
