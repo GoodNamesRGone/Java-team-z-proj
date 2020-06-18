@@ -5,20 +5,22 @@
 public class Game {
   private int lives;
   private int score;
-  private String laserPic = "images/laser.png";
+  private String meteorPic = "images/meteor.png";
   private String userLaser = "images/cool laser.png";
   private Grid grid;
   private int userRow;
+  private int userCol;
   private int msElapsed;
   private int timesGet;
   private int timesAvoid;
-  private String userPic = "images/user.gif";
+  private String userPic = "images/helmet user.png";
   private String getPic = "images/get.gif";
   public Game() {
 
     grid = new Grid(5, 10);// can edit
    // grid.setMovableBackground(imgName, xOffset, yOffset, xScale, yScale);//offset can be 0,0. Background tbd
     userRow = 3;
+    userCol = 0;
     grid.fullscreen(); 
     msElapsed = 0;
     lives = 5;
@@ -105,7 +107,7 @@ public class Game {
     //decide if an object should appear
       if(rando < thresh){
 
-          grid.setImage(loc, laserPic);//if random thing happens this appears. substitute it for laser
+          grid.setImage(loc, meteorPic);//if random thing happens this appears. substitute it for laser
 
 
       }
@@ -148,14 +150,15 @@ public class Game {
 
 }
   
-    public void handleCollision(Location loc) {
+    public void handleCollision() {
+      Location frontLoc = new Location(userRow, userCol+1);
       int lastCol = grid.getNumCols()-1;
       int lastRow = grid.getNumRows() - 1;
       if (loc.getCol() == lastCol || loc.getRow() == lastRow){
         lastCol = lastCol;
         lastRow = lastRow;
       }
-      if (loc.equals(meteor) == lastRow) {
+      if (grid.getImage(loc) == lastRow) {
         lives--;
       }
     }
