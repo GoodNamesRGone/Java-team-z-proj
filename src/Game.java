@@ -10,7 +10,7 @@ public class Game {
   private int timesGet;
   private int timesAvoid;
   private String userPic = "images/user.gif";
-  private String getPid = "images/get.gif";
+  private String getPic = "images/get.gif";
   public Game() {
 
     grid = new Grid(5, 10);// can edit
