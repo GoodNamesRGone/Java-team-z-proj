@@ -6,6 +6,7 @@ package apcsa;
 public class Game {
   private int lives;
   private int score;
+  private int pewpew;
   private String meteorPic = "images/meteor.png";
   private String userLaser = "images/cool laser.png";
   private Grid grid;
@@ -16,12 +17,14 @@ public class Game {
   private int timesAvoid;
   private String userPic = "images/helmet user.png";
   private String getPic = "images/get.gif";
+  private String userInput = "Yes";
   public Game() {
 
     grid = new Grid(5, 10);// can edit
     //grid.setBackground(imgName);
     userRow = 3;
     userCol = 0;
+    pewpew = 7;
     grid.fullscreen(); 
     msElapsed = 0;
     lives = 5;
@@ -36,15 +39,24 @@ public class Game {
 
     //start the game
     //grid.setMovableBackground(meteorPic, 0, 0, 0.1, 0.1);//offset can be 0,0. Background tbd
-    while (!isGameOver()) {
-      grid.pause(100);
-      handleKeyPress();
-      if (msElapsed % 300 == 0) {
-        scrollLeft();
-        populateRightEdge();
+    while (userInput.equals("Yes")){
+      while (!isGameOver()) {
+        grid.pause(100);
+        handleKeyPress();
+        if (msElapsed % 300 == 0) {
+          handleCollision();
+          scrollLeft();
+          populateRightEdge();
+          score+=10;
+        }
+        updateTitle();
+      
+        msElapsed += 100;
       }
-      updateTitle();
-      msElapsed += 100;
+      userInput = grid.showInputDialog("Would you like to continue? Yes or No?");
+      lives += 5;
+      score -= 5000;
+      pewpew += 7;
     }
   }
   
@@ -57,7 +69,9 @@ public class Game {
     //set "w" key to move the plane up
     if(key == 87 && userRow != 0){
         //check case where out of bounds
-
+        if (meteorPic.equals(grid.getImage(new Location(userRow-1, userCol)))) {
+          lives--;
+        }
         //change the field for userrow
 
         userRow--;
@@ -74,6 +88,9 @@ public class Game {
 //"s" key
     if(key == 83 && userRow != grid.getNumRows()-1){
       //check case where out of bounds
+      if (meteorPic.equals(grid.getImage(new Location(userRow+1, userCol)))) {
+        lives--;
+      }
       //change the field for userrow
       userRow++;
       System.out.println(userRow);
@@ -84,11 +101,11 @@ public class Game {
       Location oldLoc = new Location(userRow -1, 0);
       grid.setImage(oldLoc, null);
     }
-
-    if(key == 32) {//look for spacebar number
+    
+    if(key == 32 && pewpew != 0) {//look for spacebar number
       Location laserLoc = new Location(userRow, 1);
       grid.setImage(laserLoc, userLaser);//find a user laser pic
-
+      pewpew--;
     }
 
 
@@ -156,29 +173,44 @@ public class Game {
 }
   
     public void handleCollision() {
-      // Location frontLoc = new Location(userRow, userCol+1);
+      Location frontLoc = new Location(userRow, userCol+1);
       // int lastCol = grid.getNumCols()-1;
       // int lastRow = grid.getNumRows() - 1;
       // if (loc.getCol() == lastCol || loc.getRow() == lastRow){
       //   lastCol = lastCol;
       //   lastRow = lastRow;
       // }
-      // if (grid.getImage(loc) == lastRow) {
-      //   lives--;
-      // }
+      if (meteorPic.equals(grid.getImage(frontLoc))) {
+        lives--;
+      }
     }
   
-  
+  public int getPewpew() {
+    return pewpew;
+  }
+
   public int getScore() {
-    return 0;
+    return score;
+  }
+
+  public int getLives() {
+    return lives;
   }
   
   public void updateTitle() {
-    grid.setTitle("Game:  " + getScore());
+    grid.setTitle("AnZaiety:  " + getScore() + " with " + getLives() + " lives and " + getPewpew() + "laser.");
   }
   
   public boolean isGameOver() {
-    return false;
+    if (getScore() == 1500) {
+      grid.showMessageDialog("Yayyyyy you did it.");
+      return true;
+    } else if (getLives() == 0){
+      grid.showMessageDialog("Game over! Better luck next flight challenger.");
+      return true;
+    } else {
+      return false;
+    }
   }
     
   public static void main(String[] args) {
