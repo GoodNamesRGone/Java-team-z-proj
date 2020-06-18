@@ -3,14 +3,14 @@
  */
 
 public class Game {
-  private String laserPic = "images/laser.png";
+  private String laserPic = "images/meteor.png";
   private String userLaser = "images/cool laser.png";
   private Grid grid;
   private int userRow;
   private int msElapsed;
   private int timesGet;
   private int timesAvoid;
-  private String userPic = "images/user.gif";
+  private String userPic = "images/helmet user.png";
   private String getPic = "images/get.gif";
   public Game() {
 
