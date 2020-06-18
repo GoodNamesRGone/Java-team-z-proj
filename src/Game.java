@@ -3,19 +3,21 @@
  */
 
 public class Game {
-  private String laserPic = "images/laser.png";
+  private String laserPic = "images/meteor.png";
+  private String userLaser = "images/cool laser.png";
   private Grid grid;
   private int userRow;
   private int msElapsed;
   private int timesGet;
   private int timesAvoid;
-  private String userPic = "images/user.gif";
+  private String userPic = "images/helmet user.png";
   private String getPic = "images/get.gif";
   public Game() {
 
     grid = new Grid(5, 10);// can edit
     //grid.setBackground(imgName);
     userRow = 3;
+    grid.fullscreen(); 
     msElapsed = 0;
     timesGet = 0;
     timesAvoid = 0;
@@ -48,7 +50,7 @@ public class Game {
     System.out.println(key);
 
     //set "w" key to move the plane up
-    if(key == 87 && userRow == 0){
+    if(key == 87 && userRow != 0){
         //check case where out of bounds
 
         //change the field for userrow
@@ -57,7 +59,7 @@ public class Game {
 
         //shift the user picture up in the array
         Location loc = new Location(userRow, 0);
-        grid.setImage(loc, "user.gif");//insert user pics
+        grid.setImage(loc, userPic);//insert user pics
         
         Location oldLoc = new Location(userRow+1, 0);
         grid.setImage(oldLoc, null);
@@ -65,18 +67,28 @@ public class Game {
   }
     //if I push down arrow, then plane goes down
 //"s" key
-    if(key == 83 && userRow == 0){
+    if(key == 83 && userRow != grid.getNumRows()-1){
       //check case where out of bounds
       //change the field for userrow
-      userRow--;
+      userRow++;
+      System.out.println(userRow);
       //shift the user picture up in the array
       Location loc = new Location(userRow, 0);
-      grid.setImage(loc, "user.gif");//insert user pics
-    }  
-      Location oldLoc = new Location(userRow+1, 0);
+      grid.setImage(loc, userPic);//insert user pics
+      
+      Location oldLoc = new Location(userRow -1, 0);
       grid.setImage(oldLoc, null);
+    }
 
-}
+    if(key == 32) {//look for spacebar number
+      Location laserLoc = new Location(userRow, 1);
+      grid.setImage(laserLoc, userLaser);//find a user laser pic
+
+    }
+
+
+
+  }
   
   
   public void populateRightEdge(){
@@ -91,7 +103,7 @@ public class Game {
 
     //get a random number to pct of appearances
    double rando = Math.random();
-   double thresh = 0.5;
+   double thresh = 0.2;
     //decide if an object should appear
       if(rando < thresh){
 
@@ -108,7 +120,7 @@ public class Game {
     int lastRow = grid.getNumRows() - 1;
 
     //looping through each column
-    for(int c = 0; c <=lastCol; c++){
+    for(int c = 0; c <=lastCol - 1; c++){
 
         //right column and left column
         int rightCol = c + 1;
@@ -132,6 +144,10 @@ public class Game {
           grid.setImage(rightLoc, null);
         }
   }
+       Location loc = new Location(userRow, 0);
+        grid.setImage(loc, userPic);
+
+
 }
   
     public void handleCollision(Location loc) {
