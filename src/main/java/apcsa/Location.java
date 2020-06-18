@@ -1,3 +1,4 @@
+package apcsa;
 public class Location {
 
   private int row;

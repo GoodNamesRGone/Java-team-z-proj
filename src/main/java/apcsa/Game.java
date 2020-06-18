@@ -1,3 +1,4 @@
+package apcsa;
 /* Game Class Starter File
  * Last Edit: 5/25/2020
  */
@@ -34,7 +35,7 @@ public class Game {
     //title screen
 
     //start the game
-    grid.setMovableBackground(laserPic, 0, 0, 0.1, 0.1);//offset can be 0,0. Background tbd
+    //grid.setMovableBackground(meteorPic, 0, 0, 0.1, 0.1);//offset can be 0,0. Background tbd
     while (!isGameOver()) {
       grid.pause(100);
       handleKeyPress();
@@ -155,16 +156,16 @@ public class Game {
 }
   
     public void handleCollision() {
-      Location frontLoc = new Location(userRow, userCol+1);
-      int lastCol = grid.getNumCols()-1;
-      int lastRow = grid.getNumRows() - 1;
-      if (loc.getCol() == lastCol || loc.getRow() == lastRow){
-        lastCol = lastCol;
-        lastRow = lastRow;
-      }
-      if (grid.getImage(loc) == lastRow) {
-        lives--;
-      }
+      // Location frontLoc = new Location(userRow, userCol+1);
+      // int lastCol = grid.getNumCols()-1;
+      // int lastRow = grid.getNumRows() - 1;
+      // if (loc.getCol() == lastCol || loc.getRow() == lastRow){
+      //   lastCol = lastCol;
+      //   lastRow = lastRow;
+      // }
+      // if (grid.getImage(loc) == lastRow) {
+      //   lives--;
+      // }
     }
   
   
