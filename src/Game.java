@@ -10,11 +10,11 @@ public class Game {
   private int timesGet;
   private int timesAvoid;
   private String userPic = "images/user.gif";
-  
+  private String getPid = "images/get.gif";
   public Game() {
 
     grid = new Grid(5, 10);// can edit
-    grid.setMovableBackground(imgName, xOffset, yOffset, xScale, yScale);//offset can be 0,0. 
+   // grid.setMovableBackground(imgName, xOffset, yOffset, xScale, yScale);//offset can be 0,0. Background tbd
     userRow = 3;
     msElapsed = 0;
     timesGet = 0;
@@ -44,7 +44,7 @@ public class Game {
     System.out.println(key);
 
     //set "w" key to move the plane up
-    if(key == 87){
+    if(key == 87 && userRow == 0){
         //check case where out of bounds
 
         //change the field for userrow
@@ -53,24 +53,82 @@ public class Game {
 
         //shift the user picture up in the array
         Location loc = new Location(userRow, 0);
-        grid.setImage(loc, "user.gif");
+        grid.setImage(loc, "user.gif");//insert user pics
         
         Location oldLoc = new Location(userRow+1, 0);
         grid.setImage(oldLoc, null);
 
   }
     //if I push down arrow, then plane goes down
+//"s" key
+    if(key == 83 && userRow == 0){
+      //check case where out of bounds
+      //change the field for userrow
+      userRow--;
+      //shift the user picture up in the array
+      Location loc = new Location(userRow, 0);
+      grid.setImage(loc, "user.gif");//insert user pics
+    }  
+      Location oldLoc = new Location(userRow+1, 0);
+      grid.setImage(oldLoc, null);
 
-
-  }
+}
+  
   
   public void populateRightEdge(){
+    //get the last column
+      int lastCol = grid.getNumCols()-1;
+      int lastRow = grid.getNumRows() -1;
+    //loop through last column
+    for(int r = 0; r <= lastRow; r++) {
+      //find location for each cell in last row
+      Location loc = new Location(r, lastCol);
 
+
+    //get a random number to pct of appearances
+   double rando = Math.random();
+   double thresh = 0.5;
+    //decide if an object should appear
+      if(rando < thresh){
+
+          grid.setImage(loc, this.getPic);//if random thing happens this appears
+
+
+      }
+    }
   }
-  
   public void scrollLeft(){
 
+    //get the last column
+    int lastCol = grid.getNumCols()-1;
+    int lastRow = grid.getNumRows() - 1;
+
+    //looping through each column
+    for(int c = 0; c <=lastCol; c++){
+
+        //right column and left column
+        int rightCol = c + 1;
+        int leftCol = c;
+
+        //loop through each row
+        for(int r = 0; r <= lastRow; r++) {
+
+        //move items from right to left
+          Location rightLoc = new Location(r, rightCol);
+          Location leftLoc = new Location(r, leftCol);
+
+         
+		//copy a picture. Copying from right to left
+         
+          String rightPic = grid.getImage(rightLoc);
+           grid.setImage(leftLoc, rightPic);
+
+
+          //erase the old image
+          grid.setImage(rightLoc, null);
+        }
   }
+}
   
   public void handleCollision(Location loc) {
 
