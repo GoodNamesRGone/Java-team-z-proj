@@ -17,6 +17,7 @@ public class Game {
     grid = new Grid(5, 10);// can edit
    // grid.setMovableBackground(imgName, xOffset, yOffset, xScale, yScale);//offset can be 0,0. Background tbd
     userRow = 3;
+    grid.fullscreen(); 
     msElapsed = 0;
     timesGet = 0;
     timesAvoid = 0;
