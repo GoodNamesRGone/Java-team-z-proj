@@ -3,7 +3,7 @@
  */
 
 public class Game {
-
+  private String laserPic = "images/laser.png";
   private Grid grid;
   private int userRow;
   private int msElapsed;
@@ -91,7 +91,7 @@ public class Game {
     //decide if an object should appear
       if(rando < thresh){
 
-          grid.setImage(loc, this.getPic);//if random thing happens this appears
+          grid.setImage(loc, laserPic);//if random thing happens this appears. substitute it for laser
 
 
       }
@@ -130,9 +130,15 @@ public class Game {
   }
 }
   
-  public void handleCollision(Location loc) {
-
-  }
+    public void handleCollision(Location loc) {
+      int lastCol = grid.getNumCols()-1;
+      int lastRow = grid.getNumRows() - 1;
+      if (loc.getCol() == lastCol || loc.getRow() == lastRow){
+        lastCol = lastCol;
+        lastRow = lastRow;
+      }
+    }
+  
   
   public int getScore() {
     return 0;
