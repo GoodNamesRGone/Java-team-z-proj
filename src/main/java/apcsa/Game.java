@@ -34,7 +34,7 @@ public class Game {
   private McImage textIns; 
   public Game() {
 
-    grid = new Grid(5, 10);// can edit
+    grid = new Grid(6, 10);// can edit
     // grid.setBackground(imgName);
     userRow = 3;
     userCol = 0;
@@ -98,15 +98,15 @@ public class Game {
           x=0;
         }
       grid.setBackground(cycleGif);
-      grid.setMultiCellImage(instructions, new Location(0, 0), 5, 3);
+      grid.setMultiCellImage(instructions, new Location(0, 0), 6, 3);
 
       start = grid.checkLastKeyPressed() == -1;
 
     }
     
     grid.removeBackground();
-    //grid.removeMultiCellImage();
-   // grid.setBackground(coverUp);
+    grid.removeMultiCellImage();
+    grid.setBackground(coverUp);
     firstSong.pauseSound();
   }
  
