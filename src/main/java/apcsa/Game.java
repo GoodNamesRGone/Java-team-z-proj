@@ -78,8 +78,8 @@ public class Game {
 
 
   public void titleScreen() {
-    boolean start = grid.checkLastKeyPressed() == 13;
-    while (!start) {
+    boolean start = grid.checkLastKeyPressed() == -1;
+    while (start) {
      cycleGif = "gif/frame(" + x + ").png" ;
         x++;
       grid.pause(100);
@@ -89,7 +89,7 @@ public class Game {
       grid.setBackground(cycleGif);
       grid.setMultiCellImage(instructions, new Location(0, 0), 5, 3);
 
-      start = grid.checkLastKeyPressed() == 13;
+      start = grid.checkLastKeyPressed() == -1;
     }
     
     grid.removeBackground();
