@@ -32,7 +32,7 @@ public class Game {
   
   public void play() {
     
-    //title screen
+    titleScreen();
 
     //start the game
     //grid.setMovableBackground(meteorPic, 0, 0, 0.1, 0.1);//offset can be 0,0. Background tbd
@@ -46,6 +46,17 @@ public class Game {
       updateTitle();
       msElapsed += 100;
     }
+  }
+
+  public void titleScreen() {
+    boolean start = grid.checkLastKeyPressed() == 13;
+
+    while(!start){
+      //render in the gif
+      
+      start = grid.checkLastKeyPressed() == 13;
+        }
+    
   }
   
   public void handleKeyPress(){
