@@ -24,7 +24,7 @@ public class Grid extends JComponent implements KeyListener, MouseListener
 	private boolean bgSet = false;
 	private McImage mcImage;
 	private boolean mciSet = false;
-
+	
 	private int xOffset;
 	private int yOffset;
 	private double xScale;

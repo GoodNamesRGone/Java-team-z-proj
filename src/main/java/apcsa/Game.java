@@ -3,13 +3,16 @@ package apcsa;
  * Last Edit: 5/25/2020
  */
 
+import javax.crypto.spec.GCMParameterSpec;
+
 public class Game {
   private int lives;
+  private String instructions = "images/textinstruc.jpg";
   private int score;
   private int pewpew;
   private final String meteorPic = "images/meteor.png";
   private final String background = "images/space.png";
-  private final String titleGif = "images/maskglitch.gif";
+  //private final String titleGif = "images/maskglitch.gif";
   private final String userLaser = "images/cool laser.png";
   private final Grid grid;
   private int userRow;
@@ -20,7 +23,10 @@ public class Game {
   private final String userPic = "images/helmet user.png";
   private final String getPic = "images/get.gif";
   private String userInput = "Yes";
-
+  private int x = 0;
+  private String cycleGif = "gif/frame(" + x + ").png" ;
+  private int allTimeScore = 0;
+  private McImage textIns; 
   public Game() {
 
     grid = new Grid(5, 10);// can edit
@@ -33,7 +39,8 @@ public class Game {
     lives = 5;
     score = 0;
     updateTitle();
-    grid.setImage(new Location(userRow, 0), userPic);
+   grid.setMultiCellImage(instructions, new Location(0, 0), 5, 3);
+    
   }
 
   
@@ -71,12 +78,22 @@ public class Game {
 
 
   public void titleScreen() {
-    boolean start = grid.checkLastKeyPressed() == 32;
+    boolean start = grid.checkLastKeyPressed() == 13;
     while (!start) {
-      grid.setBackground(titleGif);
-      start = grid.checkLastKeyPressed() == 32;
+     cycleGif = "gif/frame(" + x + ").png" ;
+        x++;
+      grid.pause(100);
+        if(x >= 123){
+          x=0;
+        }
+      grid.setBackground(cycleGif);
+      grid.setMultiCellImage(instructions, new Location(0, 0), 5, 3);
+
+      start = grid.checkLastKeyPressed() == 13;
     }
+    
     grid.removeBackground();
+    //grid.removeMultiCellImage();
   }
  
   
@@ -217,15 +234,29 @@ public class Game {
   }
 
   public boolean isGameOver() {
-    if (getScore() == 1500) {
-      grid.showMessageDialog("Yayyyyy you did it.");
+     if (getScore() == 1500) {
+      grid.showMessageDialog(highScoreCheck() + " Yayyyyy you did it!");
       return true;
     } else if (getLives() == 0) {
-      grid.showMessageDialog("Game over! Better luck next flight challenger.");
+      grid.showMessageDialog(highScoreCheck() + " Game over! Looks like the hatchet buried you this time... ");
       return true;
     } else {
       return false;
     }
+  }
+
+  public String highScoreCheck() {
+    String status = "Your grudge got the best of you...Try mastering the mask's powers to beat your highscore of " + allTimeScore;
+    ;
+    if(getScore()>allTimeScore){
+      status = "You beat your all time High score of " + allTimeScore + " with a score of " + getScore() + " !";
+      allTimeScore = getScore();
+    }
+    else if (getScore()==allTimeScore){
+      status = "Almost there...You tied your highscore of " + getScore() + " !";
+
+    }
+    return status;
   }
 
   public static void main(String[] args) {
