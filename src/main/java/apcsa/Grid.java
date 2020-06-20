@@ -63,6 +63,10 @@ public class Grid extends JComponent implements KeyListener, MouseListener
 		return cells[0].length;
 	}
 
+	public JFrame getFrame() {
+		return frame;
+	}
+
 	public boolean isValid(final Location loc) {
 		final int row = loc.getRow();
 		final int col = loc.getCol();
@@ -183,6 +187,19 @@ public class Grid extends JComponent implements KeyListener, MouseListener
 		bgSet = false;
 	}
 
+	//Just for gifs, don't touch or I touch you
+	public void gifsOnly(String path) {
+		
+	}
+
+	//Removal of the cancer
+	public void gifRemoval(String path) {
+		URL url = this.getClass().getResource(path);
+		Icon icon = new ImageIcon(url);
+		JLabel label = new JLabel(icon);
+		frame.getContentPane().remove(label);
+	}
+
 	/*
 	 * Sets an image into only some of the Cells of the Grid
 	 */
@@ -295,7 +312,7 @@ public class Grid extends JComponent implements KeyListener, MouseListener
 		frame.setVisible(true);
 	}
 
-	private BufferedImage loadImage(String imageFileName) {
+	public BufferedImage loadImage(String imageFileName) {
 		final URL url = getClass().getResource(imageFileName);
 		if (url == null) {
 			throw new RuntimeException("cannot find file:  " + imageFileName);
@@ -307,7 +324,7 @@ public class Grid extends JComponent implements KeyListener, MouseListener
 		}
 	}
 
-	private void showFullImage(BufferedImage image) {
+	public void showFullImage(BufferedImage image) {
 		for (int row = 0; row < getNumRows(); row++) {
 			for (int col = 0; col < getNumCols(); col++) {
 				int x = col * image.getWidth() / getNumCols();

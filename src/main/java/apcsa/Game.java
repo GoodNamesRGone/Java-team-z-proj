@@ -6,192 +6,228 @@ package apcsa;
 public class Game {
   private int lives;
   private int score;
-  private String meteorPic = "images/meteor.png";
-  private String userLaser = "images/cool laser.png";
-  private Grid grid;
+  private int pewpew;
+  private final String meteorPic = "images/meteor.png";
+  private final String background = "images/space.png";
+  private final String titleGif = "images/maskglitch.gif";
+  private final String userLaser = "images/cool laser.png";
+  private final Grid grid;
   private int userRow;
-  private int userCol;
+  private final int userCol;
   private int msElapsed;
   private int timesGet;
   private int timesAvoid;
-  private String userPic = "images/helmet user.png";
-  private String getPic = "images/get.gif";
+  private final String userPic = "images/helmet user.png";
+  private final String getPic = "images/get.gif";
+  private String userInput = "Yes";
+
   public Game() {
 
     grid = new Grid(5, 10);// can edit
-    //grid.setBackground(imgName);
+    // grid.setBackground(imgName);
     userRow = 3;
     userCol = 0;
-    grid.fullscreen(); 
+    pewpew = 7;
+    grid.fullscreen();
     msElapsed = 0;
     lives = 5;
     score = 0;
     updateTitle();
     grid.setImage(new Location(userRow, 0), userPic);
   }
+
   
+
   public void play() {
-    
+
+    // titlescreen method
     titleScreen();
 
-    //start the game
-    //grid.setMovableBackground(meteorPic, 0, 0, 0.1, 0.1);//offset can be 0,0. Background tbd
-    while (!isGameOver()) {
-      grid.pause(100);
-      handleKeyPress();
-      if (msElapsed % 300 == 0) {
-        scrollLeft();
-        populateRightEdge();
+    // start the game
+    // grid.setMovableBackground(meteorPic, 0, 0, 0.1, 0.1);//offset can be 0,0.
+    // Background tbd
+    while (userInput.equals("Yes")) {
+      while (!isGameOver()) {
+        grid.pause(100);
+        handleKeyPress();
+        if (msElapsed % 300 == 0) {
+          handleCollision();
+          scrollLeft();
+          populateRightEdge();
+          score += 10;
+        }
+        updateTitle();
+
+        msElapsed += 100;
       }
-      updateTitle();
-      msElapsed += 100;
+      
+        userInput = grid.showInputDialog("Would you like to continue? Yes or No?");
+        lives += 5;
+        score -= 5000;
+        pewpew += 7;
     }
+    grid.getFrame().dispose();
   }
+
 
   public void titleScreen() {
-    boolean start = grid.checkLastKeyPressed() == 13;
-
-    while(!start){
-      //render in the gif
-      
-      start = grid.checkLastKeyPressed() == 13;
-        }
-    
+    boolean start = grid.checkLastKeyPressed() == 32;
+    while (!start) {
+      grid.setBackground(titleGif);
+      start = grid.checkLastKeyPressed() == 32;
+    }
+    grid.removeBackground();
   }
+ 
   
-  public void handleKeyPress(){
+  
 
-    //check last key pressed
-    int key = grid.checkLastKeyPressed();
+  public void handleKeyPress() {
+
+    // check last key pressed
+    final int key = grid.checkLastKeyPressed();
     System.out.println(key);
 
-    //set "w" key to move the plane up
-    if(key == 87 && userRow != 0){
-        //check case where out of bounds
+    // set "w" key to move the plane up
+    if (key == 87 && userRow != 0) {
+      // check case where out of bounds
+      if (meteorPic.equals(grid.getImage(new Location(userRow - 1, userCol)))) {
+        lives--;
+      }
+      // change the field for userrow
 
-        //change the field for userrow
+      userRow--;
 
-        userRow--;
+      // shift the user picture up in the array
+      final Location loc = new Location(userRow, 0);
+      grid.setImage(loc, userPic);// insert user pics
 
-        //shift the user picture up in the array
-        Location loc = new Location(userRow, 0);
-        grid.setImage(loc, userPic);//insert user pics
-        
-        Location oldLoc = new Location(userRow+1, 0);
-        grid.setImage(oldLoc, null);
+      final Location oldLoc = new Location(userRow + 1, 0);
+      grid.setImage(oldLoc, null);
 
-  }
-    //if I push down arrow, then plane goes down
-//"s" key
-    if(key == 83 && userRow != grid.getNumRows()-1){
-      //check case where out of bounds
-      //change the field for userrow
+    }
+    // if I push down arrow, then plane goes down
+    // "s" key
+    if (key == 83 && userRow != grid.getNumRows() - 1) {
+      // check case where out of bounds
+      if (meteorPic.equals(grid.getImage(new Location(userRow + 1, userCol)))) {
+        lives--;
+      }
+      // change the field for userrow
       userRow++;
       System.out.println(userRow);
-      //shift the user picture up in the array
-      Location loc = new Location(userRow, 0);
-      grid.setImage(loc, userPic);//insert user pics
-      
-      Location oldLoc = new Location(userRow -1, 0);
+      // shift the user picture up in the array
+      final Location loc = new Location(userRow, 0);
+      grid.setImage(loc, userPic);// insert user pics
+
+      final Location oldLoc = new Location(userRow - 1, 0);
       grid.setImage(oldLoc, null);
     }
 
-    if(key == 32) {//look for spacebar number
-      Location laserLoc = new Location(userRow, 1);
-      grid.setImage(laserLoc, userLaser);//find a user laser pic
-
+    if (key == 32 && pewpew != 0) {// look for spacebar number
+      final Location laserLoc = new Location(userRow, 1);
+      grid.setImage(laserLoc, userLaser);// find a user laser pic
+      pewpew--;
     }
 
-
-
   }
-  
-  
-  public void populateRightEdge(){
-    //get the last column
-      int lastCol = grid.getNumCols()-1;
-      int lastRow = grid.getNumRows() -1;
-    //loop through last column
-    for(int r = 0; r <= lastRow; r++) {
-      //find location for each cell in last row
-      Location loc = new Location(r, lastCol);
 
+  public void populateRightEdge() {
+    // get the last column
+    final int lastCol = grid.getNumCols() - 1;
+    final int lastRow = grid.getNumRows() - 1;
+    // loop through last column
+    for (int r = 0; r <= lastRow; r++) {
+      // find location for each cell in last row
+      final Location loc = new Location(r, lastCol);
 
-    //get a random number to pct of appearances
-   double rando = Math.random();
-   double thresh = 0.2;
-    //decide if an object should appear
-      if(rando < thresh){
+      // get a random number to pct of appearances
+      final double rando = Math.random();
+      final double thresh = 0.2;
+      // decide if an object should appear
+      if (rando < thresh) {
 
-          grid.setImage(loc, meteorPic);//if random thing happens this appears. substitute it for laser
-
+        grid.setImage(loc, meteorPic);// if random thing happens this appears. substitute it for laser
 
       }
     }
   }
-  public void scrollLeft(){
 
-    //get the last column
-    int lastCol = grid.getNumCols()-1;
-    int lastRow = grid.getNumRows() - 1;
+  public void scrollLeft() {
 
-    //looping through each column
-    for(int c = 0; c <=lastCol - 1; c++){
+    // get the last column
+    final int lastCol = grid.getNumCols() - 1;
+    final int lastRow = grid.getNumRows() - 1;
 
-        //right column and left column
-        int rightCol = c + 1;
-        int leftCol = c;
+    // looping through each column
+    for (int c = 0; c <= lastCol - 1; c++) {
 
-        //loop through each row
-        for(int r = 0; r <= lastRow; r++) {
+      // right column and left column
+      final int rightCol = c + 1;
+      final int leftCol = c;
 
-        //move items from right to left
-          Location rightLoc = new Location(r, rightCol);
-          Location leftLoc = new Location(r, leftCol);
+      // loop through each row
+      for (int r = 0; r <= lastRow; r++) {
 
-         
-		//copy a picture. Copying from right to left
-         
-          String rightPic = grid.getImage(rightLoc);
-           grid.setImage(leftLoc, rightPic);
+        // move items from right to left
+        final Location rightLoc = new Location(r, rightCol);
+        final Location leftLoc = new Location(r, leftCol);
 
+        // copy a picture. Copying from right to left
 
-          //erase the old image
-          grid.setImage(rightLoc, null);
-        }
-  }
-       Location loc = new Location(userRow, 0);
-        grid.setImage(loc, userPic);
+        final String rightPic = grid.getImage(rightLoc);
+        grid.setImage(leftLoc, rightPic);
 
-
-}
-  
-    public void handleCollision() {
-      // Location frontLoc = new Location(userRow, userCol+1);
-      // int lastCol = grid.getNumCols()-1;
-      // int lastRow = grid.getNumRows() - 1;
-      // if (loc.getCol() == lastCol || loc.getRow() == lastRow){
-      //   lastCol = lastCol;
-      //   lastRow = lastRow;
-      // }
-      // if (grid.getImage(loc) == lastRow) {
-      //   lives--;
-      // }
+        // erase the old image
+        grid.setImage(rightLoc, null);
+      }
     }
-  
-  
+    final Location loc = new Location(userRow, 0);
+    grid.setImage(loc, userPic);
+
+  }
+
+  public void handleCollision() {
+    final Location frontLoc = new Location(userRow, userCol + 1);
+    // int lastCol = grid.getNumCols()-1;
+    // int lastRow = grid.getNumRows() - 1;
+    // if (loc.getCol() == lastCol || loc.getRow() == lastRow){
+    // lastCol = lastCol;
+    // lastRow = lastRow;
+    // }
+    if (meteorPic.equals(grid.getImage(frontLoc))) {
+      lives--;
+    }
+  }
+
+  public int getPewpew() {
+    return pewpew;
+  }
+
   public int getScore() {
-    return 0;
+    return score;
   }
-  
+
+  public int getLives() {
+    return lives;
+  }
+
   public void updateTitle() {
-    grid.setTitle("Game:  " + getScore());
+    grid.setTitle("AnZaiety:  " + getScore() + " with " + getLives() + " lives and " + getPewpew() + " laser.");
   }
-  
+
   public boolean isGameOver() {
-    return false;
+    if (getScore() == 1500) {
+      grid.showMessageDialog("Yayyyyy you did it.");
+      return true;
+    } else if (getLives() == 0) {
+      grid.showMessageDialog("Game over! Better luck next flight challenger.");
+      return true;
+    } else {
+      return false;
+    }
   }
-    
+
   public static void main(String[] args) {
     Game game = new Game();
     game.play();   
