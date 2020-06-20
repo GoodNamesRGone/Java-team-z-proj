@@ -7,6 +7,7 @@ import javax.crypto.spec.GCMParameterSpec;
 
 public class Game {
   private int lives;
+  private String coverUp = "images/blackcoverup.jpg";
   private String instructions = "images/textinstruc.jpg";
   private int score;
   private int pewpew;
@@ -17,6 +18,8 @@ public class Game {
   private final Grid grid;
   private int userRow;
   private final int userCol;
+  private WavPlayer firstSong;
+  private WavPlayer secondSong;
   private int msElapsed;
   private int timesGet;
   private int timesAvoid;
@@ -26,6 +29,8 @@ public class Game {
   private int x = 0;
   private String cycleGif = "gif/frame(" + x + ").png" ;
   private int allTimeScore = 0;
+  private String firstS = "audio/title.wav";
+  private String secondS = "audio/game music.wav";
   private McImage textIns; 
   public Game() {
 
@@ -40,6 +45,8 @@ public class Game {
     score = 0;
     updateTitle();
    grid.setMultiCellImage(instructions, new Location(0, 0), 5, 3);
+   firstSong = new WavPlayer(firstS);
+   secondSong = new WavPlayer(secondS);
     
   }
 
@@ -54,6 +61,7 @@ public class Game {
     // grid.setMovableBackground(meteorPic, 0, 0, 0.1, 0.1);//offset can be 0,0.
     // Background tbd
     while (userInput.equals("Yes")) {
+      secondSong.startSound();
       while (!isGameOver()) {
         grid.pause(100);
         handleKeyPress();
@@ -74,11 +82,14 @@ public class Game {
         pewpew += 7;
     }
     grid.getFrame().dispose();
+    secondSong.pauseSound();
+
   }
 
 
   public void titleScreen() {
     boolean start = grid.checkLastKeyPressed() == -1;
+    firstSong.startSound();
     while (start) {
      cycleGif = "gif/frame(" + x + ").png" ;
         x++;
@@ -90,10 +101,13 @@ public class Game {
       grid.setMultiCellImage(instructions, new Location(0, 0), 5, 3);
 
       start = grid.checkLastKeyPressed() == -1;
+
     }
     
     grid.removeBackground();
     //grid.removeMultiCellImage();
+   // grid.setBackground(coverUp);
+    firstSong.pauseSound();
   }
  
   
@@ -230,7 +244,7 @@ public class Game {
   }
 
   public void updateTitle() {
-    grid.setTitle("AnZaiety:  " + getScore() + " with " + getLives() + " lives and " + getPewpew() + " laser.");
+    grid.setTitle("HoloGrudge:  " + getScore() + " with " + getLives() + " lives and " + getPewpew() + " laser.");
   }
 
   public boolean isGameOver() {

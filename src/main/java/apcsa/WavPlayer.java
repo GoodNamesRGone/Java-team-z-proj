@@ -65,7 +65,7 @@ public class WavPlayer {
 	public WavPlayer(String track) {
 		this.wavMusicFile = "/apcsa/" + track;
 		System.out.println(wavMusicFile);
-		startSound();
+		//startSound();
 
 	}
 
